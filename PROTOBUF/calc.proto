@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package protobuf;
+
+option java_package = "PROTOBUF";
+option java_outer_classname = "CalcProto";
+option java_multiple_files = true;
+
+// Tipos de mensagem
+enum MessageType {
+  UNKNOWN = 0;
+  REQUEST = 1;
+  RESPONSE = 2;
+}
+
+// Requisição de cálculo
+message CalculationRequest {
+  int32 sequence = 1;       // número de sequência
+  double operand1 = 2;      // primeiro operando
+  double operand2 = 3;      // segundo operando
+  string operation = 4;     // "+", "-", "*", "/"
+}
+
+// Resposta de cálculo
+message CalculationResponse {
+  int32 sequence = 1;       // mesmo número de sequência
+  bool success = 2;         // true = resultado, false = erro
+  double result = 3;        // preenchido se success = true
+  string error_message = 4; // preenchido se success = false
+}
+
+// Mensagem única que encapsula requisição ou resposta
+message CalcMessage {
+  MessageType type = 1;
+  oneof payload {
+    CalculationRequest request = 2;
+    CalculationResponse response = 3;
+  }
+}
